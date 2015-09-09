@@ -1,6 +1,7 @@
 package fetchData
 
 import (
+	"fmt"
 	"strings"
 	"time"
 
@@ -36,11 +37,12 @@ func Events() int {
 					break
 				}
 			}
+			counter += 1
+			fmt.Println(counter)
 		}
 		if endLoop == true {
 			break
 		}
-		counter += 1
 	}
 	return counter
 }
