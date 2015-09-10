@@ -62,7 +62,7 @@ func (token *Token) getEvent(eventUrl string) *EventAPIResponse {
 }
 
 func (token *Token) EventGen() func() *EventAPIResponse {
-	eventUrl := "/v2/events?order-direction=desc"
+	eventUrl := "/v2/events"
 	return func() *EventAPIResponse {
 		eventResponse := token.getEvent(eventUrl)
 		eventUrl = eventResponse.NextUrl
