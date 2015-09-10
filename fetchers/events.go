@@ -32,7 +32,7 @@ func Events() int {
 			err := collection.Insert(mongoEvent)
 			if err != nil {
 				// Break loop if there are document exist in the database
-				if strings.HasPrefix(err.Error(), "E11000") {
+				if strings.Contains(err.Error(), "E11000") {
 					endLoop = true
 					break
 				} else {

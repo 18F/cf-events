@@ -13,7 +13,7 @@ func main() {
 	log.Println("Starting app")
 	// Start cron job for every hour
 	c := cron.New()
-	c.AddFunc("0 0 */1 * * *", func() {
+	c.AddFunc("0 0 */30 * * *", func() {
 		log.Println("Starting Collection")
 		eventsCount := fetchData.Events()
 		log.Println("Event Collection Complete. Events Collected: ", eventsCount)

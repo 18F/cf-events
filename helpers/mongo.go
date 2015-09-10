@@ -14,7 +14,7 @@ func GetMongoSession() *mgo.Session {
 	appEnv, _ := cfenv.Current()
 	if appEnv != nil {
 		// Get services
-		services, _ := appEnv.Services.WithTag("mongodb")
+		services, _ := appEnv.Services.WithTag("mongo")
 		// Get mongo service info
 		mongoURI = fmt.Sprint(services[0].Credentials["uri"])
 	} else {
