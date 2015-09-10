@@ -1,7 +1,7 @@
 package fetchData
 
 import (
-	"fmt"
+	"log"
 	"strings"
 	"time"
 
@@ -35,10 +35,11 @@ func Events() int {
 				if strings.HasPrefix(err.Error(), "E11000") {
 					endLoop = true
 					break
+				} else {
+					log.Fatal(err.Error())
 				}
 			}
 			counter += 1
-			fmt.Println(counter)
 		}
 		if endLoop == true {
 			break
