@@ -20,7 +20,6 @@ func Events() int {
 	// events Generator
 	eventsGen := token.EventGen()
 	// get event indefinitely
-	endLoop := false
 	for _ = range time.Tick(2 * time.Second) {
 		apiResponse := eventsGen()
 		if apiResponse.NextUrl == "" {
@@ -31,18 +30,12 @@ func Events() int {
 			mongoEvent := helpers.MongoEventResource{event.MetaData.Guid, event}
 			err := collection.Insert(mongoEvent)
 			if err != nil {
-				// Break loop if there are document exist in the database
-				if strings.Contains(err.Error(), "E11000") {
-					endLoop = true
-					break
-				} else {
+				// Break loop only if there is a serious error
+				if strings.Contains(err.Error(), "E11000") == false {
 					log.Fatal(err.Error())
 				}
 			}
 			counter += 1
-		}
-		if endLoop == true {
-			break
 		}
 	}
 	return counter
