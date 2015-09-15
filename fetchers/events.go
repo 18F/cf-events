@@ -20,12 +20,8 @@ func Events() int {
 	// events Generator
 	eventsGen := token.EventGen()
 	// get event indefinitely
-	for _ = range time.Tick(2 * time.Second) {
+	for _ = range time.Tick(5 * time.Second) {
 		apiResponse := eventsGen()
-		if apiResponse.NextUrl == "" {
-			// Break loop if there are no more urls
-			break
-		}
 		for _, event := range apiResponse.Resources {
 			mongoEvent := helpers.MongoEventResource{event.MetaData.Guid, event}
 			err := collection.Insert(mongoEvent)
@@ -36,6 +32,10 @@ func Events() int {
 				}
 			}
 			counter += 1
+		}
+		// Break loop if there are no more urls
+		if apiResponse.NextUrl == "" {
+			break
 		}
 	}
 	return counter

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"time"
 )
 
 type EventAPIResponse struct {
@@ -44,8 +45,18 @@ type EventResource struct {
 }
 
 type MongoEventResource struct {
+	// Struct for making the Id the index, to prevent duplicate
+	// events from entering the database.
 	Id string `bson:"_id"`
 	EventResource
+}
+
+func PrepTime() string {
+	// This creates a url to collect all the data between 2 days an 2 hours ago
+	// and yesterday
+	before := time.Now().Add(-24 * time.Hour).Format("2006-01-02T15:04:04Z")
+	after := time.Now().Add(-50 * time.Hour).Format("2006-01-02T15:04:04Z")
+	return fmt.Sprintf("?q=timestamp>%s&q=timestamp<%s", after, before)
 }
 
 func (token *Token) getEvent(eventUrl string) *EventAPIResponse {
@@ -62,10 +73,15 @@ func (token *Token) getEvent(eventUrl string) *EventAPIResponse {
 }
 
 func (token *Token) EventGen() func() *EventAPIResponse {
-	eventUrl := "/v2/events"
+	// Create a generator for the events api
+	baseUrl := "/v2/events" + PrepTime()
+	currentPage := 1
+	eventUrl := baseUrl + fmt.Sprintf("&page=%d", currentPage)
 	return func() *EventAPIResponse {
+		fmt.Println(eventUrl)
 		eventResponse := token.getEvent(eventUrl)
-		eventUrl = eventResponse.NextUrl
+		currentPage += 1
+		eventUrl = baseUrl + fmt.Sprintf("&page=%d", currentPage)
 		return eventResponse
 	}
 }
