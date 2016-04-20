@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	fetchData "github.com/18f/cf-events/fetchers"
+	fetchData "github.com/18F/cf-events/fetchers"
 	"github.com/robfig/cron"
 )
 

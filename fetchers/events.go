@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	helpers "github.com/18f/cf-events/helpers"
+	helpers "github.com/18F/cf-events/helpers"
 )
 
 func Events() int {
